@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>ch.ivyteam.ivy</groupId>
+    <artifactId>parentIvyMavenPOM</artifactId>
+    <version>1.2.16.0</version>
+    <relativePath>parentIvyMavenPOM-1.2.16.0.pom</relativePath>
+  </parent>
+  <groupId>ch.mykompass.test</groupId>
+  <artifactId>mykompass_gui_test</artifactId>
+  <version>1.00.00.00-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>mykompass_gui_test</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>ch.xpertline</groupId>
+      <artifactId>base_gui_test</artifactId>
+      <version>[00.00.00.04,]</version>
+    </dependency>
+  </dependencies>
+</project>
