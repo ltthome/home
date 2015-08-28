@@ -1,15 +1,16 @@
 package local.page;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Date;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 
-public class GetPixelColor {
+public class ImageToNumberProcessor {
   private static final String[] NUMBER =
       {
           "27,27,24,179,179,164,255,255,235,255,255,235,255,255,235,255,255,235,255,255,235,255,255,235,181,181,166,26,26,23,255,255,235,6,6,5,217,217,199,255,255,235,255,255,235,255,255,235,255,255,235,255,255,235,255,255,235,218,218,200,5,5,4,255,255,235,39,39,35,157,157,144,255,255,235,255,255,235,255,255,235,255,255,235,255,255,235,255,255,235,158,158,145,38,38,35,255,255,235,",
@@ -23,24 +24,26 @@ public class GetPixelColor {
           "21,21,19,193,193,177,255,255,235,235,235,216,7,7,6,221,221,203,255,255,235,255,255,235,182,182,167,21,21,19,255,255,235,4,4,3,216,216,199,255,255,235,255,255,235,75,75,69,147,147,135,255,255,235,255,255,235,218,218,200,3,3,2,255,255,235,27,27,24,177,177,163,255,255,235,250,250,230,40,40,36,59,59,54,255,255,235,255,255,235,175,175,161,32,32,29,255,255,235,",
           "25,25,23,191,191,176,255,255,235,255,255,235,233,233,214,0,0,0,228,228,210,255,255,235,217,217,199,9,9,8,255,255,235,5,5,4,217,217,199,255,255,235,255,255,235,255,255,235,5,5,4,220,220,202,255,255,235,169,169,155,47,47,43,255,255,235,44,44,40,150,150,138,255,255,235,255,255,235,237,237,218,12,12,11,249,249,229,237,237,218,41,41,37,141,141,129,255,255,235,"};
 
-  // private static final String NO7 =
-  // "0,0,0,223,223,205,255,255,235,255,255,235,255,255,235,255,255,235,212,212,195,73,73,67,1,1,0,90,90,82,255,255,235,0,0,0,223,223,205,255,255,235,255,255,235,231,231,212,101,101,93,3,3,2,69,69,63,206,206,189,255,255,235,255,255,235,0,0,0,223,223,205,245,245,225,129,129,118,12,12,11,50,50,46,187,187,172,255,255,235,255,255,235,255,255,235,255,255,235,";
+  public static void main(String args[]) throws IOException, URISyntaxException {
+    System.out.println(new Date());
+    String urlString = "http://www.chotot.vn/pg/0zqbRKs6GpVoBpXCKxoMwpaD0QVlK0rJepzHN.gif";
 
-  public static void main(String args[]) throws IOException {
-    ArrayList<int[]> pictureModel = new ArrayList<>();
-    File file = new File("d:/tmp/crawler/1.gif");
-    BufferedImage image = ImageIO.read(file);
+    
+    String phone = getNumber(urlString);
+    System.out.println(phone);
+    System.out.println(new Date());
+  }
+
+  public static String getNumber(String urlString) throws IOException {
+    URL url = new URL(urlString);
+    BufferedImage image = ImageIO.read(url);
     StringBuilder imageBuilder = new StringBuilder();
     for (int x = 0; x < image.getWidth(); x++) {
       for (int y = 0; y < image.getHeight(); y++) {
-        // for (int x = 75; x < 78; x++) {
-        // for (int y = 0; y < image.getHeight(); y++) {
         int color = image.getRGB(x, y);
         int red = (color & 0x00ff0000) >> 16;
         int green = (color & 0x0000ff00) >> 8;
         int blue = color & 0x000000ff;
-        pictureModel.add(new int[] {x, y, red, green, blue});
-        // System.out.print(red + "," + green + "," + blue + ",");
         imageBuilder.append(red + "," + green + "," + blue + ",");
       }
     }
@@ -51,7 +54,6 @@ public class GetPixelColor {
     for (int i = 0; i < NUMBER.length; i++) {
       int index = imageAsString.indexOf(NUMBER[i]);
       while (index > -1) {
-        // System.out.println(i + ":" + index);
         indexToNumber.put(index, i);
         startPosition = index + 1;
         index = imageAsString.indexOf(NUMBER[i], startPosition);
@@ -62,6 +64,6 @@ public class GetPixelColor {
     for (int number : indexToNumber.values()) {
       phone += number;
     };
-    System.out.println(phone);
+    return phone;
   }
 }
