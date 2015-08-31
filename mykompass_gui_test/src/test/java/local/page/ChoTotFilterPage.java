@@ -18,11 +18,14 @@ public class ChoTotFilterPage extends AbstractPage {
     return "id('searchbutton')";
   }
 
-  public List<String> getURLForDetailPage() {
+  public void configureResultDisplayedAsList() {
     WebElement resultView = findElementByCssSelector(".sort_price.sort_right");
     if (resultView.getAttribute("class").indexOf("sort_inactive") > -1) {
       resultView.click();
     } 
+  }
+  
+  public List<String> getURLForDetailPage() {
     List<String> urls = new ArrayList<>();
 
     List<WebElement> urlElements = findListElementsByCssSelector(".subject > a");
