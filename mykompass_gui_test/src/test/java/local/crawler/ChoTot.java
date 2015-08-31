@@ -18,8 +18,11 @@ import ch.xpertline.base.client.Browser;
 import ch.xpertline.base.enums.BrowserType;
 
 public class ChoTot {
-  private static final String EXPORTED_FILE = "g:\\tmp\\crawler\\cho-tot.csv";
+  private static final String EXPORTED_FILE = "G:\\data\\dropbox\\Dropbox\\storage\\contact-data\\cho-tot.csv";
+
   private static final int NUMBER_OF_PAGES = 2;
+  private static final int FROM_PAGE = 1;
+  private static final int TO_PAGE = 1;
   private static final String FILTER_URL = "http://www.chotot.vn/tp-ho-chi-minh/mua-ban?f=p&o=";
 
   private static Browser browser;
@@ -40,8 +43,13 @@ public class ChoTot {
     browser = Browser.getBrowser();
     browser.launch(BrowserType.FIREFOX, FILTER_URL, "");
 
-    for (int i = 1; i <= NUMBER_OF_PAGES; i++) {
+    for (int i = FROM_PAGE; i <= TO_PAGE; i++) {
       String url = FILTER_URL + i;
+      if (i == FROM_PAGE) {
+        browser.getDriver().get(url);
+        ChoTotFilterPage filterPage = new ChoTotFilterPage();
+        filterPage.getURLForDetailPage();
+      }
       browser.getDriver().get(url);
       ChoTotFilterPage filterPage = new ChoTotFilterPage();
       List<String> detailPageURLs = filterPage.getURLForDetailPage();
@@ -51,7 +59,7 @@ public class ChoTot {
         contentBuilder = detailPage.exportContact(contentBuilder);
       }
     }
-    
+
     writeFile(contentBuilder);
   }
 
