@@ -58,7 +58,6 @@ public class TaskPage extends AbstractPage {
       outputText.append(COLUMN_SEPARATOR);
       outputText.append(findElementById("key-val").getAttribute("href"));
       outputText.append("\r\n");
-      break;
     }
 
     return outputText.toString();
@@ -69,8 +68,14 @@ public class TaskPage extends AbstractPage {
     if (duration.endsWith("h")) {
       return duration.substring(0, duration.length() - 1);
     } else if (duration.endsWith("m")) {
-      String timeInMinutes = duration.substring(0, duration.length() - 1);
-      Double timeInHours = Integer.parseInt(timeInMinutes) / 60.0;
+      String timeWithoutLastCharacter = duration.substring(0, duration.length() - 1);
+      String[] timeParts = timeWithoutLastCharacter.split("h ");
+      Double timeInHours;
+      if (timeParts.length == 2) {
+        timeInHours = Integer.parseInt(timeParts[0]) + Integer.parseInt(timeParts[1]) / 60.0;
+      } else {
+        timeInHours = Integer.parseInt(timeParts[0]) / 60.0;
+      }
       return timeInHours.toString().substring(0, 4);
     } else {
       return duration;
