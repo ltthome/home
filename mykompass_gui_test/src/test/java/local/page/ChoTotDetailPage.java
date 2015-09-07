@@ -27,12 +27,7 @@ public class ChoTotDetailPage extends AbstractPage {
     String phone = ImageToNumberProcessor.getNumber(phoneURL);
 
     String name = findElementByClassName("advertised_user").getText();
-    String price;
-    try {
-      price = findElementByClassName("price").getText();
-    } catch (Exception e) {
-      price = "";
-    }
+    String price = findElementByClassName("price").getText();
     if (outputText.indexOf(phone) == -1) {
       outputText.append(name);
       outputText.append(COLUMN_SEPARATOR);
@@ -40,9 +35,7 @@ public class ChoTotDetailPage extends AbstractPage {
       outputText.append(phone);
       outputText.append(STRING_SEPARATOR);
       outputText.append(COLUMN_SEPARATOR);
-      outputText.append(STRING_SEPARATOR);
       outputText.append(price);
-      outputText.append(STRING_SEPARATOR);
       outputText.append(COLUMN_SEPARATOR);
 
       String[] partsOfUrl = getDriver().getCurrentUrl().split("/");
