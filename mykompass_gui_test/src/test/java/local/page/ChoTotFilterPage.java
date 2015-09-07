@@ -10,7 +10,7 @@ import ch.xpertline.base.pages.AbstractPage;
 public class ChoTotFilterPage extends AbstractPage {
 
   public ChoTotFilterPage() {
-    waitForPageLoaded();
+    waitForPageLoaded(10);
   }
 
   @Override
