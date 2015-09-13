@@ -1,40 +1,40 @@
-package local.page;
+package local.jsoup.page;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import local.crawler.ChoTot;
-import ch.xpertline.base.pages.AbstractPage;
+import local.page.ImageToNumberProcessor;
 
-public class ChoTotDetailPage extends AbstractPage {
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+public class ChoTotDetailPage {
 
   private static final String COLUMN_SEPARATOR = "`";
   private static final String STRING_SEPARATOR = "~";
   private static final boolean IS_PERSONAL_ADVERTISEMENT = ChoTot.FILTER_URL.contains("f=p");
 
-  public ChoTotDetailPage() {
-    waitForPageLoaded();
-  }
+  private String url;
 
-  @Override
-  protected String getLoadedLocator() {
-    return "id('hidden-phone-b')";
+  public ChoTotDetailPage(String url) {
+    this.url = url;
   }
 
   public StringBuilder exportContact(StringBuilder outputText) throws IOException, ParseException {
-    findElementById("hidden-phone-b").click();
-    String phoneURL = findElementById("real-phone").getAttribute("src");
+    Document document = Jsoup.parse(new URL(url), 10000);
+    Element phoneElement = document.select("#real-phone").first();
+    String phoneURL = phoneElement.attr("src");
     String phone = ImageToNumberProcessor.getNumber(phoneURL);
 
-    String name = findElementByClassName("advertised_user").getText();
-    String price;
-    try {
-      price = findElementByClassName("price").getText();
-    } catch (Exception e) {
-      price = "";
-    }
+    String name = document.select(".advertised_user").first().text();
+
+    String price = "Not collected";
+
     if (outputText.indexOf(phone) == -1) {
       outputText.append(name);
       outputText.append(COLUMN_SEPARATOR);
@@ -47,7 +47,7 @@ public class ChoTotDetailPage extends AbstractPage {
       outputText.append(STRING_SEPARATOR);
       outputText.append(COLUMN_SEPARATOR);
 
-      String[] partsOfUrl = getDriver().getCurrentUrl().split("/");
+      String[] partsOfUrl = url.split("/");
       String category = partsOfUrl[4];
       String district = partsOfUrl[3];
       String detail = partsOfUrl[5];

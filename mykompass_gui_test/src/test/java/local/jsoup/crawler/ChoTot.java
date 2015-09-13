@@ -1,4 +1,4 @@
-package local.crawler;
+package local.jsoup.crawler;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import local.page.ChoTotDetailPage;
+import local.jsoup.page.ChoTotDetailPage;
 import local.page.ChoTotFilterPage;
 
 import org.junit.AfterClass;
@@ -32,7 +32,6 @@ public class ChoTot {
   // public static final String FILTER_URL = "http://www.chotot.vn/tp-ho-chi-minh/mua-ban?f=c&o=";
 
   private static Browser browser;
-  private int numberOfRequestedURLOnCurrentBrowserInstance = 0;
 
   @AfterClass
   public static void terminate() {
@@ -63,10 +62,7 @@ public class ChoTot {
 
     for (String detailPageURL : detailPageURLs) {
       try {
-        numberOfRequestedURLOnCurrentBrowserInstance++;
-        browser.getDriver().get(detailPageURL);
-        numberOfRequestedURLOnCurrentBrowserInstance++;
-        ChoTotDetailPage detailPage = new ChoTotDetailPage();
+        ChoTotDetailPage detailPage = new ChoTotDetailPage(detailPageURL);
         contentBuilder = detailPage.exportContact(contentBuilder);
       } catch (Exception e) {
         System.out.println("Error when get detail page " + detailPageURL);
@@ -82,9 +78,7 @@ public class ChoTot {
   }
 
   private void recoverWhenError() throws IOException, Exception {
-    System.out.println("Number of requested URL on the current browser instance = "
-        + numberOfRequestedURLOnCurrentBrowserInstance);
-    numberOfRequestedURLOnCurrentBrowserInstance = 0;
+    System.out.println("Recover when error");
     Runtime.getRuntime().exec("taskkill /F /IM firefox.exe");
     restartBrowser();
     configureResultDisplayedAsList();
