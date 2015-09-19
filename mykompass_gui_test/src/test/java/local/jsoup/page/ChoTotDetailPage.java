@@ -18,6 +18,8 @@ public class ChoTotDetailPage {
   private static final String COLUMN_SEPARATOR = "`";
   private static final String STRING_SEPARATOR = "~";
   private static final boolean IS_PERSONAL_ADVERTISEMENT = ChoTot.FILTER_URL.contains("f=p");
+  public static int REQUEST_COUNTER = 0;
+  public static int NEW_CONTACT_COUNTER = 0;
 
   private String url;
 
@@ -26,6 +28,10 @@ public class ChoTotDetailPage {
   }
 
   public StringBuilder exportContact(StringBuilder outputText) throws IOException, ParseException {
+    if (outputText.indexOf(url.split("/")[5]) != -1) {
+      return outputText;
+    }
+    REQUEST_COUNTER++;
     Document document = Jsoup.parse(new URL(url), 10000);
     Element phoneElement = document.select("#real-phone").first();
     String phoneURL = phoneElement.attr("src");
@@ -33,9 +39,10 @@ public class ChoTotDetailPage {
 
     String name = document.select(".advertised_user").first().text();
 
-    String price = "Not collected";
+    String price = document.select(".price").text();
 
     if (outputText.indexOf(phone) == -1) {
+      NEW_CONTACT_COUNTER++;
       outputText.append(name);
       outputText.append(COLUMN_SEPARATOR);
       outputText.append(STRING_SEPARATOR);

@@ -23,13 +23,18 @@ import ch.xpertline.base.client.Browser;
 import ch.xpertline.base.enums.BrowserType;
 
 public class ChoTot {
-  private static final String EXPORTED_FILE = "G:\\data\\dropbox\\Dropbox\\storage\\contact-data\\contact.csv";
-  private static final String TMP_FILE = "G:\\data\\dropbox\\Dropbox\\storage\\contact-data\\contact%s.csv";
+  private static final String EXPORTED_FILE_NAME = "contact";
+  // private static final String EXPORTED_FILE_NAME = "contact-tran";
+  private static final String EXPORTED_FILE = "G:\\data\\dropbox\\Dropbox\\storage\\contact-data\\"
+      + EXPORTED_FILE_NAME + ".csv";
+  private static final String TMP_FILE = "G:\\data\\dropbox\\Dropbox\\storage\\contact-data\\" + EXPORTED_FILE_NAME
+      + "%s.csv";
 
-  private static final int NUMBER_OF_PAGES = 1;
-  private static final int FROM_PAGE = 1;
-  public static final String FILTER_URL = "http://www.chotot.vn/tp-ho-chi-minh/mua-ban?f=p&o=";
-  // public static final String FILTER_URL = "http://www.chotot.vn/tp-ho-chi-minh/mua-ban?f=c&o=";
+  private static final int NUMBER_OF_PAGES = 180;// 176
+  private static final int FROM_PAGE = 1; // include 16/9 18h17 100
+  public static final String FILTER_URL = "http://www.chotot.vn/tp-ho-chi-minh/mua-ban?f=p&o="; // ca nhan
+  // public static final String FILTER_URL = "http://www.chotot.vn/tp-ho-chi-minh/mua-ban?f=c&o="; // cong ty
+  // public static final String FILTER_URL = "http://www.chotot.vn/tp-ho-chi-minh/mua-ban-nha-dat?f=p&o="; // nha dat
 
   private static Browser browser;
 
@@ -60,20 +65,24 @@ public class ChoTot {
       }
     }
 
+    System.out.println("Finished getting URL: " + new Date());
+
     for (String detailPageURL : detailPageURLs) {
       try {
         ChoTotDetailPage detailPage = new ChoTotDetailPage(detailPageURL);
         contentBuilder = detailPage.exportContact(contentBuilder);
       } catch (Exception e) {
         System.out.println("Error when get detail page " + detailPageURL);
-        e.printStackTrace();
+        System.out.println("Number of requests: " + ChoTotDetailPage.REQUEST_COUNTER + " / Number of new contacts: "
+            + ChoTotDetailPage.NEW_CONTACT_COUNTER);
         writeFile(contentBuilder, String.format(TMP_FILE, new Date().getTime()));
-        recoverWhenError();
       }
     }
 
     outputContent.insert(0, contentBuilder.substring(originalLengthOfBuilder));
     writeFile(outputContent);
+    System.out.println("Number of requests: " + ChoTotDetailPage.REQUEST_COUNTER);
+    System.out.println("Number of new contacts: " + ChoTotDetailPage.NEW_CONTACT_COUNTER);
     System.out.println(new Date());
   }
 
