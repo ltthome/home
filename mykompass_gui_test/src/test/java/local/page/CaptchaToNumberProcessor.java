@@ -23,10 +23,11 @@ public class CaptchaToNumberProcessor {
           "102,153,0,149,191,91,255,255,255,250,255,250,255,255,255,213,229,187,121,165,31,102,153,0,102,153,0,102,153,0,102,153,0,",
           "229,255,243,102,153,0,102,153,0,102,153,0,229,255,243,255,255,255,102,153,0,102,153,0,102,153,0,255,255,255,255,255,255,",
           "255,255,255,102,153,0,102,153,0,102,153,0,255,255,255,255,255,255,255,255,255,250,255,250,102,153,0,197,216,159,255,255,255,"};
+  //102,153,0
 
   public static void main(String args[]) throws IOException, URISyntaxException {
     System.out.println(new Date());
-    String urlString = "file:\\\\\\D:\\tmp\\5min.png";
+    String urlString = "file:\\\\\\D:\\TUNG\\source\\home\\mykompass_gui_test\\src\\test\\resources\\image\\number\\5.png";
 
     
     String phone = getNumber(urlString);
@@ -38,13 +39,18 @@ public class CaptchaToNumberProcessor {
     URL url = new URL(urlString);
     BufferedImage image = ImageIO.read(url);
     StringBuilder imageBuilder = new StringBuilder();
+//    StringBuilder colorBuilder = new StringBuilder();
     for (int x = 0; x < image.getWidth(); x++) {
       for (int y = 0; y < image.getHeight(); y++) {
         int color = image.getRGB(x, y);
         int red = (color & 0x00ff0000) >> 16;
         int green = (color & 0x0000ff00) >> 8;
         int blue = color & 0x000000ff;
-        imageBuilder.append(red + "," + green + "," + blue + ",");
+        if (red == 255 && green == 255 && blue == 255) {
+        	imageBuilder.append(0 + ",");
+        } else {
+        	imageBuilder.append(1 + ",");
+        }
       }
       System.out.println(x + "=" + imageBuilder);
       imageBuilder = new StringBuilder();
